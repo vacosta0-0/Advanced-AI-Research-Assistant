@@ -1,0 +1,93 @@
+# ============================================================
+# .gitignore — Advanced AI Research Assistant
+# ============================================================
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+
+# --- Entornos virtuales ---
+venv/
+env/
+ENV/
+.venv/
+.env
+
+# --- Variables de entorno / secretos ---
+.env
+.env.local
+*.key
+secrets.py
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# --- Base de datos vectorial (generada automáticamente) ---
+chroma_db/
+!chroma_db/.gitkeep
+
+# --- Datos sensibles / pesados ---
+data/raw/
+data/processed/
+data/external/
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/external/.gitkeep
+
+# --- Archivos PDF (pueden ser pesados o tener derechos de autor) ---
+*.pdf
+
+# --- Modelos entrenados (archivos pesados) ---
+models/
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.safetensors
+
+# --- Resultados y métricas generadas ---
+results/*.png
+results/*.jpg
+results/*.csv
+results/*.json
+!results/.gitkeep
+
+# --- IDEs y editores ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Caché de Hugging Face y sentence-transformers ---
+.cache/
+~/.cache/huggingface/
+
+# --- Archivos temporales ---
+*.tmp
+*.temp
+tmp/
+temp/
