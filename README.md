@@ -163,41 +163,48 @@ print(assistant.get_stats())
 
 ---
 
-## � Evidencia de Funcionamiento
+## Evidencia de Funcionamiento
 
 A continuación se presentan las capturas de pantalla que demuestran el funcionamiento del sistema:
 
 ### 1️⃣ Interfaz Principal
 ![Instalación de Dependencias](screenshots/01.png)
+
 *Proceso automático de instalación de todas las dependencias del sistema (PyPDF2, pdfminer.six, chromadb, sentence-transformers, transformers, torch). Inicialización de vectorDB, carga de modelos de embeddings y LLM.*
 
 ### 2️⃣ Cargando Documento PDF
 ![Cargando PDF](screenshots/02.png)
+
 *Carga exitosa de documento (machine_learning_2024.pdf): extracción de 45,892 caracteres, generación de 52 chunks y adición a la base de datos vectorial completado en 8.3 segundos.*
 
 ### 3️⃣ Extracción de Texto
 ![Menú Principal](screenshots/03.png)
+
 *Interfaz interactiva del sistema con opciones para: (1) Añadir documento PDF, (2) Realizar consulta, (3) Ver estadísticas, (4) Listar documentos, (5) Limpiar base de datos, (6) Salir*
 
 ### 4️⃣ Búsqueda Semántica
 ![Estadísticas](screenshots/04.png)
+
 *Panel de estadísticas: 3 documentos indexados (García2024_ML, López2023_DL, Smith2024_AI) con 156 chunks totales. Modelo de embeddings all-MiniLM-L6-v2 (384D), precisión de recuperación 92.7%, tiempo de búsqueda promedio 0.3s, tamaño de BD 45.2 MB.*
 
 ### 5️⃣ Resultados Basados en Relevancia
 ![Consulta Semántica](screenshots/05.png)
+
 *Realización de consulta "¿Cuáles son las principales técnicas de deep learning mencionadas?" - búsqueda vectorial en ChromaDB, encontrados 5 resultados relevantes, síntesis con modelo BART en ejecución.*
 
 ### 6️⃣ Síntesis de Respuesta
 ![Respuesta Generada](screenshots/06.png)
+
 *Respuesta completa: síntesis de 5 técnicas principales (CNN, RNN/LSTM, Transformers, Autoencoders, GANs) con descripciones sobre su uso. Fuentes citadas: García2024_ML, López2023_DL, Smith2024_AI. Relevancia promedio: 87.3%, Tiempo de respuesta: 2.1 segundos.*
 
 ### 7️⃣ Estadísticas del Sistema
 ![Documentos en BD](screenshots/07.png)
+
 *Base de datos con 3 artículos académicos indexados: García2024_ML (52 chunks, ~52,000 palabras), López2023_DL (48 chunks, ~48,000 palabras), Smith2024_AI (56 chunks, ~56,000 palabras). Total: 156 chunks y ~156,000 palabras en la colección research_papers.*
 
 ---
 
-## �📦 Dependencias
+## Dependencias
 
 | Librería | Versión | Uso |
 |----------|---------|-----|
