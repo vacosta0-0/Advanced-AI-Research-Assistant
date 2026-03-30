@@ -1,225 +1,154 @@
-# 🧠 Advanced AI Research Assistant
-### Sistema Multiagente para Análisis Automatizado de Literatura Académica
+# 🔬 AI Research Assistant — v3.0 (Rama: v2-multiproveedor)
 
-> Trabajo de Titulación — Procesamiento de Lenguaje Natural (NLP) con Python  
-> Arquitectura modular basada en tres agentes especializados con búsqueda semántica vectorial
+> **Evolución del sistema base** → Arquitectura avanzada con UI web, procesamiento paralelo y soporte multi-proveedor de IA.
 
 ---
 
-## 📋 Descripción del Proyecto
+## 🆚 ¿Qué cambió respecto a la versión base (`main`)?
 
-Este repositorio contiene el código fuente del sistema desarrollado como parte del trabajo de titulación en el área de **Inteligencia Artificial**, con enfoque en **Procesamiento de Lenguaje Natural (NLP)**.
-
-El sistema permite cargar artículos académicos en formato PDF, procesarlos automáticamente y realizar consultas en lenguaje natural para obtener respuestas sintetizadas con las fuentes correspondientes.
-
-### ¿Qué problema resuelve?
-
-Investigadores y estudiantes deben revisar grandes volúmenes de literatura académica. Este sistema automatiza ese proceso mediante:
-- Extracción inteligente de texto desde PDFs
-- Indexación semántica vectorial
-- Búsqueda por significado (no solo palabras clave)
-- Síntesis automática de respuestas con citas de fuentes
-
----
-
-## 🏗️ Arquitectura del Sistema
-
-El sistema implementa una **arquitectura multiagente** con tres componentes especializados:
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│              AdvancedAIResearchAssistant (Orquestador)       │
-├──────────────────┬──────────────────┬───────────────────────┤
-│  Agente 1        │  Agente 2        │  Agente 3             │
-│  PDFExtractor    │  VectorDatabase  │  ResponseSynthesizer  │
-│                  │                  │                        │
-│ - PyPDF2         │ - ChromaDB       │ - Modo extractivo     │
-│ - PDFMiner       │ - SentenceTransf │ - Modo LLM (opcional) │
-│ - Chunking       │ - Embeddings     │ - Síntesis con fuentes│
-└──────────────────┴──────────────────┴───────────────────────┘
-```
-
-| Agente | Responsabilidad |
-|--------|----------------|
-| `PDFExtractorAgent` | Extrae y limpia texto de PDFs, genera chunks con overlap |
-| `VectorDatabaseAgent` | Genera embeddings y gestiona búsquedas semánticas con ChromaDB |
-| `ResponseSynthesizerAgent` | Sintetiza respuestas coherentes desde los fragmentos recuperados |
+| Característica | `main` (v1 básica) | `v2-multiproveedor` (v3.0) |
+|---|---|---|
+| **Interfaz** | Menú de texto en terminal | UI web con Gradio |
+| **Proveedor IA** | Solo BART local | Hugging Face gratis + Anthropic + OpenAI |
+| **Procesamiento PDFs** | Secuencial (uno a uno) | **Paralelo** con `ThreadPoolExecutor` |
+| **Embeddings** | Por lotes básicos | `batch_size=64`, sin barra de progreso |
+| **Deduplicación** | No | Sí (evita reindexar chunks existentes) |
+| **Filtro por documento** | No | Sí (consultas sobre PDFs específicos) |
+| **Distancia vectorial** | Default ChromaDB | Coseno explícito (`hnsw:space: cosine`) |
+| **Modelos soportados** | BART (local) | Mistral-7B, Llama 3.1, Zephyr, Claude, GPT |
+| **Detección automática** | No | Sí (detecta el mejor modelo HF disponible) |
+| **Configuración** | Hardcoded | Dataclass `Config` centralizada |
 
 ---
 
-## 🗂️ Estructura del Repositorio
+## 🏗️ Arquitectura v3.0
 
 ```
-advanced-ai-research-assistant/
+┌──────────────────────────────────────────────────────────────────┐
+│                    Gradio UI (build_ui)                          │
+│          ⚙️ Config │ 📄 Documentos │ 💬 Consultas               │
+└───────────────────────────┬──────────────────────────────────────┘
+                            │
+┌───────────────────────────▼──────────────────────────────────────┐
+│                  ResearchAssistant (Orquestador)                  │
+├──────────────────┬───────────────────────┬───────────────────────┤
+│ PDFExtractorAgent│  VectorDatabaseAgent  │  Synthesizer (multi)  │
+│                  │                       │                        │
+│ - PyPDF2         │ - ChromaDB coseno     │ HuggingFaceSynthesizer│
+│ - PDFMiner       │ - Deduplicación       │ AnthropicSynthesizer  │
+│ - ThreadPool     │ - Filtro por doc      │ OpenAISynthesizer     │
+│ - Chunking       │ - Batch embeddings    │ (detección automática)│
+└──────────────────┴───────────────────────┴───────────────────────┘
+```
+
+---
+
+## 🗂️ Estructura de esta rama
+
+```
+advanced-ai-research-assistant/          ← mismo repositorio
 │
-├── src/                            # Código fuente principal
-│   └── PROYECTO_FINAL.py          # Sistema completo multiagente
+├── src/
+│   └── research_assistant.py           ← código v3.0 (esta rama)
 │
-├── data/                           # Datos del proyecto
-│   ├── raw/                        # PDFs originales (no subir al repo)
-│   ├── processed/                  # Textos procesados
-│   └── external/                   # Datasets externos
+├── data/
+│   ├── raw/                            # PDFs originales
+│   ├── processed/                      # Datos procesados
+│   └── external/                       # Datos externos
 │
-├── notebooks/                      # Jupyter Notebooks de análisis
-│   ├── 01_exploracion.ipynb        # Exploración inicial de datos
-│   ├── 02_preprocesamiento.ipynb   # Pruebas de extracción de texto
-│   └── 03_evaluacion.ipynb         # Evaluación de resultados
-│
-├── chroma_db/                      # Base de datos vectorial (generada automáticamente)
+├── chroma_db_v3/                       # BD vectorial v3 (auto-generada)
 │   └── .gitkeep
 │
-├── results/                        # Resultados, métricas y gráficas
+├── results/
 │   └── .gitkeep
 │
-├── tests/                          # Pruebas unitarias
-│   └── test_agentes.py
-│
-├── requirements.txt                # Dependencias del proyecto
-├── .gitignore                      # Archivos ignorados por Git
-└── README.md                       # Este archivo
+├── requirements.txt                    # Dependencias (incluye Gradio + HF)
+├── .gitignore
+└── README.md                           ← este archivo
 ```
 
 ---
 
-## ⚙️ Instalación y Configuración
-
-### Requisitos previos
-- Python 3.8 o superior
-- pip actualizado
-
-### 1. Clonar el repositorio
+## ⚙️ Instalación
 
 ```bash
+# Clonar y cambiar a esta rama
 git clone https://github.com/TU_USUARIO/advanced-ai-research-assistant.git
 cd advanced-ai-research-assistant
-```
+git checkout v2-multiproveedor
 
-### 2. Crear entorno virtual (recomendado)
-
-```bash
+# Entorno virtual
 python -m venv venv
+source venv/bin/activate   # Mac/Linux
+# venv\Scripts\activate    # Windows
 
-# Windows:
-venv\Scripts\activate
-
-# Mac / Linux:
-source venv/bin/activate
-```
-
-### 3. Instalar dependencias
-
-```bash
+# Dependencias
 pip install -r requirements.txt
 ```
-
-> ⚡ El sistema también puede instalar dependencias automáticamente al ejecutarse por primera vez.
 
 ---
 
 ## 🚀 Uso
 
-### Modo interactivo (recomendado)
-
 ```bash
-python src/PROYECTO_FINAL.py
+python src/research_assistant.py
 ```
 
-Esto abre un menú con las siguientes opciones:
+Abre automáticamente la UI en `http://localhost:7860`
+
+### Pasos en la interfaz:
+
+1. **⚙️ Configuración** → Selecciona proveedor e ingresa tu API key
+   - **Hugging Face** (gratis): crea cuenta en huggingface.co → Settings → Access Tokens
+   - **Anthropic**: console.anthropic.com
+   - **OpenAI**: platform.openai.com/api-keys
+
+2. **📄 Documentos** → Arrastra tus PDFs → clic en "Indexar"
+
+3. **💬 Consultas** → Selecciona documentos a consultar y escribe tu pregunta
+
+---
+
+## 📦 Dependencias adicionales vs. v1
 
 ```
-MENÚ PRINCIPAL
--------------------------------------------------
-1. Añadir documento PDF
-2. Realizar consulta
-3. Ver estadísticas
-4. Listar documentos
-5. Limpiar base de datos
-6. Salir
-```
+gradio>=3.50.0          # UI web
+huggingface_hub>=0.20   # Inference API gratuita
+requests>=2.31.0        # HTTP para APIs
 
-### Modo programático
-
-```python
-from src.PROYECTO_FINAL import AdvancedAIResearchAssistant
-
-# Inicializar sistema
-assistant = AdvancedAIResearchAssistant(
-    chunk_size=800,
-    overlap=150,
-    collection_name="mi_coleccion"
-)
-
-# Añadir artículos PDF
-assistant.add_document("papers/articulo1.pdf", document_id="Smith2023_NLP")
-assistant.add_document("papers/articulo2.pdf", document_id="Jones2024_ML")
-
-# Realizar consultas en lenguaje natural
-respuesta = assistant.query("¿Cuáles son las principales técnicas de NLP?")
-print(respuesta)
-
-# Ver estadísticas
-print(assistant.get_stats())
+# Opcionales (según proveedor elegido)
+anthropic>=0.20.0       # Claude
+openai>=1.10.0          # GPT
 ```
 
 ---
 
-## 📦 Dependencias
+## 🆓 Uso con Hugging Face (sin costo)
 
-| Librería | Versión | Uso |
-|----------|---------|-----|
-| `PyPDF2` | ≥3.0 | Extracción de texto de PDFs |
-| `pdfminer.six` | ≥20221105 | Extracción robusta de PDFs complejos |
-| `chromadb` | ≥0.4 | Base de datos vectorial persistente |
-| `sentence-transformers` | ≥2.2 | Generación de embeddings semánticos |
-| `transformers` | ≥4.30 | Modelos de lenguaje (síntesis opcional) |
-| `torch` | ≥2.0 | Backend para modelos de ML |
-| `numpy` | ≥1.24 | Operaciones numéricas |
+El sistema detecta automáticamente el mejor modelo disponible en este orden:
 
----
+1. `mistralai/Mistral-7B-Instruct-v0.3`
+2. `meta-llama/Meta-Llama-3.1-8B-Instruct`
+3. `HuggingFaceH4/zephyr-7b-beta`
+4. `microsoft/Phi-3-mini-4k-instruct`
+5. `google/gemma-2-2b-it`
+6. `tiiuae/falcon-7b-instruct`
 
-## 🔬 Descripción Técnica
-
-### Extracción de Texto (`PDFExtractorAgent`)
-- Implementa **dos estrategias de extracción**: PyPDF2 (rápido) y PDFMiner (robusto para PDFs complejos)
-- Modo `auto`: intenta PyPDF2 primero, cambia a PDFMiner si el resultado es insuficiente
-- **Chunking con overlap**: divide el texto en fragmentos de tamaño configurable con solapamiento para mantener contexto entre fragmentos
-
-### Base de Datos Vectorial (`VectorDatabaseAgent`)
-- Usa **ChromaDB** con persistencia en disco
-- Genera embeddings con el modelo `all-MiniLM-L6-v2` (sentence-transformers)
-- Búsqueda por **similitud coseno** en espacio vectorial de alta dimensión
-
-### Síntesis de Respuestas (`ResponseSynthesizerAgent`)
-- **Modo extractivo**: selecciona y presenta fragmentos más relevantes con porcentaje de relevancia
-- **Modo LLM** (opcional): usa `facebook/bart-large-cnn` para síntesis generativa si está disponible
-- Degrada graciosamente al modo extractivo si el modelo LLM no puede cargarse
-
----
-
-## 📊 Resultados y Evaluación
-
-Los resultados de las pruebas y métricas de evaluación del sistema se documentarán en la carpeta `results/` conforme avance el desarrollo de la tesis.
+La cuenta gratuita permite ~1000 consultas/día.
 
 ---
 
 ## 👤 Autor
 
-**[Victoria Acosta Sarauz]**
-- Universidad: [Universidad Técnica del Norte]
-- Carrera: [Tenologías de la Información]
-- Director de tesis: [Pablo Andrés Lnadeta López]
+**[Tu Nombre Completo]**
+- Universidad: [Nombre de tu universidad]
+- Carrera: [Tu carrera]
+- Director de tesis: [Nombre del director]
 - Año: 2025
 
 ---
 
-## 📄 Licencia
+## 🔗 Ver también
 
-Este proyecto es desarrollado con fines académicos como parte de un trabajo de titulación.
-
----
-
-## 🙏 Reconocimientos
-
-- [sentence-transformers](https://www.sbert.net/) por los modelos de embeddings
-- [ChromaDB](https://www.trychroma.com/) por la base de datos vectorial
-- [Hugging Face](https://huggingface.co/) por los modelos de lenguaje
+- Rama `main` → versión base del sistema (terminal, sin UI)
+- Comparar: `git diff main v2-multiproveedor`
