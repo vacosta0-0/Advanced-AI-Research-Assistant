@@ -204,10 +204,10 @@ Los resultados de las pruebas y métricas de evaluación del sistema se document
 
 ## 👤 Autor
 
-**[Tu Nombre Completo]**
-- Universidad: [Nombre de tu universidad]
-- Carrera: [Tu carrera]
-- Director de tesis: [Nombre del director]
+**[Victoria Acosta Sarauz]**
+- Universidad: [Universidad Técnica del Norte]
+- Carrera: [Tenologías de la Información]
+- Director de tesis: [Pablo Andrés Lnadeta López]
 - Año: 2025
 
 ---
