@@ -141,9 +141,9 @@ La cuenta gratuita permite ~1000 consultas/día.
 ## 👤 Autor
 
 **[Tu Nombre Completo]**
-- Universidad: [Nombre de tu universidad]
-- Carrera: [Tu carrera]
-- Director de tesis: [Nombre del director]
+- Universidad: Universidad Técnica del Norte
+- Carrera: Tecnologías de la Información
+- Director de tesis: Pablo Andrés Landeta López
 - Año: 2025
 
 ---
