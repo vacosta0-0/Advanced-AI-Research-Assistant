@@ -25,3 +25,7 @@ numpy>=1.24.0
 # PROVEEDORES ADICIONALES
 anthropic>=0.20.0
 openai>=1.10.0
+
+#CrewAI
+crewai>=0.28.0
+crewai-tools>=0.1.0
