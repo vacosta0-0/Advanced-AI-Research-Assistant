@@ -1,207 +1,57 @@
-# 🧠 Advanced AI Research Assistant
-### Sistema Multiagente para Análisis Automatizado de Literatura Académica
+# AI Research Assistant v3.2 🚀
 
-> Trabajo de Titulación — Procesamiento de Lenguaje Natural (NLP) con Python  
-> Arquitectura modular basada en tres agentes especializados con búsqueda semántica vectorial
+Este repositorio contiene un sistema de **Asistente de Investigación Avanzado** basado en una arquitectura de **múltiples agentes inteligentes**. La aplicación permite realizar análisis multi-documento de archivos PDF utilizando técnicas de **Generación Aumentada por Recuperación (RAG)**, garantizando el aislamiento de datos por usuario.
 
 ---
 
-## 📋 Descripción del Proyecto
+## 📂 Estructura del Proyecto
 
-Este repositorio contiene el código fuente del sistema desarrollado como parte del trabajo de titulación en el área de **Inteligencia Artificial**, con enfoque en **Procesamiento de Lenguaje Natural (NLP)**.
+A continuación se detalla la función de cada archivo dentro de la arquitectura modular del sistema:
 
-El sistema permite cargar artículos académicos en formato PDF, procesarlos automáticamente y realizar consultas en lenguaje natural para obtener respuestas sintetizadas con las fuentes correspondientes.
-
-### ¿Qué problema resuelve?
-
-Investigadores y estudiantes deben revisar grandes volúmenes de literatura académica. Este sistema automatiza ese proceso mediante:
-- Extracción inteligente de texto desde PDFs
-- Indexación semántica vectorial
-- Búsqueda por significado (no solo palabras clave)
-- Síntesis automática de respuestas con citas de fuentes
+- **`app.py`**: Punto de entrada principal. Verifica e instala dependencias y lanza la interfaz de usuario.
+- **`assistant.py`**: **Orquestador Principal**. Coordina la interacción entre el agente de extracción, la base de datos vectorial y los sintetizadores de IA.
+- **`config.py`**: Centraliza la configuración del sistema, incluyendo modelos de Hugging Face (Llama-3.1 por defecto), parámetros de fragmentación (`chunk_size: 600`, `overlap: 100`) y rutas de persistencia.
+- **`extractor.py`**: **Agente de Extracción**. Utiliza `PyPDF2` y `pdfminer.six` para extraer texto de PDFs y dividirlo en fragmentos manejables.
+- **`embedder.py`**: Genera **embeddings semánticos** con `SentenceTransformer`, con respaldo en TF-IDF.
+- **`vectordb.py`**: **Agente de Almacenamiento**. Gestiona la base de datos vectorial `ChromaDB`, con aislamiento por usuario.
+- **`synthesizers.py`**: **Agente de Síntesis**. Conecta con Hugging Face, OpenAI y Anthropic para generar respuestas académicas basadas en un `SYSTEM_PROMPT`.
+- **`ui.py`**: Interfaz de usuario construida con **Gradio**, organizada en pestañas para consultas, gestión de archivos y configuración.
+- **`models.py`**: Define estructuras de datos como `DocumentChunk` y `SearchResult`.
+- **`requirements.txt`**: Lista de dependencias necesarias (Gradio, ChromaDB, Hugging Face Hub, etc.).
 
 ---
 
 ## 🏗️ Arquitectura del Sistema
 
-El sistema implementa una **arquitectura multiagente** con tres componentes especializados:
+El sistema se basa en flujos de trabajo especializados representados en los siguientes diagramas:
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│              AdvancedAIResearchAssistant (Orquestador)       │
-├──────────────────┬──────────────────┬───────────────────────┤
-│  Agente 1        │  Agente 2        │  Agente 3             │
-│  PDFExtractor    │  VectorDatabase  │  ResponseSynthesizer  │
-│                  │                  │                        │
-│ - PyPDF2         │ - ChromaDB       │ - Modo extractivo     │
-│ - PDFMiner       │ - SentenceTransf │ - Modo LLM (opcional) │
-│ - Chunking       │ - Embeddings     │ - Síntesis con fuentes│
-└──────────────────┴──────────────────┴───────────────────────┘
-```
+1. **Arquitectura de Componentes** – (D1)  
+2. **Flujo de Indexación** – (D2)  
+3. **Flujo de Consulta (RAG)** – (D3)  
+4. **Diagrama de Secuencia UML** – (D4)  
+5. **Ciclo de Vida del Sintetizador** – (D5)  
 
-| Agente | Responsabilidad |
-|--------|----------------|
-| `PDFExtractorAgent` | Extrae y limpia texto de PDFs, genera chunks con overlap |
-| `VectorDatabaseAgent` | Genera embeddings y gestiona búsquedas semánticas con ChromaDB |
-| `ResponseSynthesizerAgent` | Sintetiza respuestas coherentes desde los fragmentos recuperados |
+Cada diagrama está disponible en formato PNG con los nombres indicados (D1–D5).
 
 ---
 
-## 🗂️ Estructura del Repositorio
+## 📸 Evidencias de Funcionamiento (Hugging Face Spaces)
 
-```
-advanced-ai-research-assistant/
-│
-├── src/                            # Código fuente principal
-│   └── PROYECTO_FINAL.py          # Sistema completo multiagente
-│
-├── data/                           # Datos del proyecto
-│   ├── raw/                        # PDFs originales (no subir al repo)
-│   ├── processed/                  # Textos procesados
-│   └── external/                   # Datasets externos
-│
-├── notebooks/                      # Jupyter Notebooks de análisis
-│   ├── 01_exploracion.ipynb        # Exploración inicial de datos
-│   ├── 02_preprocesamiento.ipynb   # Pruebas de extracción de texto
-│   └── 03_evaluacion.ipynb         # Evaluación de resultados
-│
-├── chroma_db/                      # Base de datos vectorial (generada automáticamente)
-│   └── .gitkeep
-│
-├── results/                        # Resultados, métricas y gráficas
-│   └── .gitkeep
-│
-├── tests/                          # Pruebas unitarias
-│   └── test_agentes.py
-│
-├── requirements.txt                # Dependencias del proyecto
-├── .gitignore                      # Archivos ignorados por Git
-└── README.md                       # Este archivo
-```
+La aplicación está desplegada y operativa, con las siguientes funciones:
+
+- **Interfaz de Consultas**: Chatbot interactivo con soporte multi-fuente. *(EV1)*  
+- **Gestión de Archivos**: Panel para subir, indexar y eliminar PDFs de forma privada. *(EV2)*  
+- **Configuración Dinámica**: Selector de proveedores de LLM (Hugging Face, Anthropic, OpenAI) y modelos como `Llama-3.1-8B`. *(EV3)*  
 
 ---
 
-## ⚙️ Instalación y Configuración
+## 🛠️ Requisitos e Instalación
 
-### Requisitos previos
-- Python 3.8 o superior
-- pip actualizado
-
-### 1. Clonar el repositorio
-
-```bash
-git clone https://github.com/TU_USUARIO/advanced-ai-research-assistant.git
-cd advanced-ai-research-assistant
-```
-
-### 2. Crear entorno virtual (recomendado)
-
-```bash
-python -m venv venv
-
-# Windows:
-venv\Scripts\activate
-
-# Mac / Linux:
-source venv/bin/activate
-```
-
-### 3. Instalar dependencias
+Para ejecutar este proyecto localmente:
 
 ```bash
 pip install -r requirements.txt
-```
-
-> ⚡ El sistema también puede instalar dependencias automáticamente al ejecutarse por primera vez.
-
----
-
-## 🚀 Uso
-
-### Modo interactivo (recomendado)
-
-```bash
-python src/PROYECTO_FINAL.py
-```
-
-Esto abre un menú con las siguientes opciones:
-
-```
-MENÚ PRINCIPAL
--------------------------------------------------
-1. Añadir documento PDF
-2. Realizar consulta
-3. Ver estadísticas
-4. Listar documentos
-5. Limpiar base de datos
-6. Salir
-```
-
-### Modo programático
-
-```python
-from src.PROYECTO_FINAL import AdvancedAIResearchAssistant
-
-# Inicializar sistema
-assistant = AdvancedAIResearchAssistant(
-    chunk_size=800,
-    overlap=150,
-    collection_name="mi_coleccion"
-)
-
-# Añadir artículos PDF
-assistant.add_document("papers/articulo1.pdf", document_id="Smith2023_NLP")
-assistant.add_document("papers/articulo2.pdf", document_id="Jones2024_ML")
-
-# Realizar consultas en lenguaje natural
-respuesta = assistant.query("¿Cuáles son las principales técnicas de NLP?")
-print(respuesta)
-
-# Ver estadísticas
-print(assistant.get_stats())
-```
-
----
-
-## Evidencia de Funcionamiento
-
-A continuación se presentan las capturas de pantalla que demuestran el funcionamiento del sistema:
-
-### 1️⃣ Interfaz Principal
-![Instalación de Dependencias](screenshots/01.png)
-
-*Proceso automático de instalación de todas las dependencias del sistema (PyPDF2, pdfminer.six, chromadb, sentence-transformers, transformers, torch). Inicialización de vectorDB, carga de modelos de embeddings y LLM.*
-
-### 2️⃣ Cargando Documento PDF
-![Cargando PDF](screenshots/02.png)
-
-*Carga exitosa de documento (machine_learning_2024.pdf): extracción de 45,892 caracteres, generación de 52 chunks y adición a la base de datos vectorial completado en 8.3 segundos.*
-
-### 3️⃣ Extracción de Texto
-![Menú Principal](screenshots/03.png)
-
-*Interfaz interactiva del sistema con opciones para: (1) Añadir documento PDF, (2) Realizar consulta, (3) Ver estadísticas, (4) Listar documentos, (5) Limpiar base de datos, (6) Salir*
-
-### 4️⃣ Búsqueda Semántica
-![Estadísticas](screenshots/04.png)
-
-*Panel de estadísticas: 3 documentos indexados (García2024_ML, López2023_DL, Smith2024_AI) con 156 chunks totales. Modelo de embeddings all-MiniLM-L6-v2 (384D), precisión de recuperación 92.7%, tiempo de búsqueda promedio 0.3s, tamaño de BD 45.2 MB.*
-
-### 5️⃣ Resultados Basados en Relevancia
-![Consulta Semántica](screenshots/05.png)
-
-*Realización de consulta "¿Cuáles son las principales técnicas de deep learning mencionadas?" - búsqueda vectorial en ChromaDB, encontrados 5 resultados relevantes, síntesis con modelo BART en ejecución.*
-
-### 6️⃣ Síntesis de Respuesta
-![Respuesta Generada](screenshots/06.png)
-
-*Respuesta completa: síntesis de 5 técnicas principales (CNN, RNN/LSTM, Transformers, Autoencoders, GANs) con descripciones sobre su uso. Fuentes citadas: García2024_ML, López2023_DL, Smith2024_AI. Relevancia promedio: 87.3%, Tiempo de respuesta: 2.1 segundos.*
-
-### 7️⃣ Estadísticas del Sistema
-![Documentos en BD](screenshots/07.png)
-
-*Base de datos con 3 artículos académicos indexados: García2024_ML (52 chunks, ~52,000 palabras), López2023_DL (48 chunks, ~48,000 palabras), Smith2024_AI (56 chunks, ~56,000 palabras). Total: 156 chunks y ~156,000 palabras en la colección research_papers.*
-
+python app.py
 ---
 
 ## Dependencias
@@ -246,9 +96,9 @@ Los resultados de las pruebas y métricas de evaluación del sistema se document
 ## 👤 Autor
 
 **[Victoria Acosta Sarauz]**
-- Universidad: [Universidad Técnica del Norte]
-- Carrera: [Tenologías de la Información]
-- Director de tesis: [Pablo Andrés Lnadeta López]
+- Universidad: Universidad Técnica del Norte
+- Carrera: Tenologías de la Información
+- Director de tesis: Pablo Andrés Lnadeta López
 - Año: 2025
 
 ---
