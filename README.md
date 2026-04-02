@@ -25,13 +25,20 @@ A continuación se detalla la función de cada archivo dentro de la arquitectura
 
 El sistema se basa en flujos de trabajo especializados representados en los siguientes diagramas:
 
-1. **Arquitectura de Componentes** – (D1)  
-2. **Flujo de Indexación** – (D2)  
-3. **Flujo de Consulta (RAG)** – (D3)  
-4. **Diagrama de Secuencia UML** – (D4)  
-5. **Ciclo de Vida del Sintetizador** – (D5)  
+### 1️⃣ Arquitectura de Componentes
+![Arquitectura de Componentes](diagrams/D1.png)
 
-Cada diagrama está disponible en formato PNG con los nombres indicados (D1–D5).
+### 2️⃣ Flujo de Indexación
+![Flujo de Indexación](diagrams/D2.png)
+
+### 3️⃣ Flujo de Consulta (RAG)
+![Flujo de Consulta](diagrams/D3.png)
+
+### 4️⃣ Diagrama de Secuencia UML
+![Diagrama de Secuencia UML](diagrams/D4.png)
+
+### 5️⃣ Ciclo de Vida del Sintetizador
+![Ciclo de Vida del Sintetizador](diagrams/D5.png)
 
 ---
 
@@ -39,9 +46,17 @@ Cada diagrama está disponible en formato PNG con los nombres indicados (D1–D5
 
 La aplicación está desplegada y operativa, con las siguientes funciones:
 
-- **Interfaz de Consultas**: Chatbot interactivo con soporte multi-fuente. *(EV1)*  
-- **Gestión de Archivos**: Panel para subir, indexar y eliminar PDFs de forma privada. *(EV2)*  
-- **Configuración Dinámica**: Selector de proveedores de LLM (Hugging Face, Anthropic, OpenAI) y modelos como `Llama-3.1-8B`. *(EV3)*  
+### 🔹 Interfaz de Consultas
+![Interfaz de Consultas](screenshots/EV1.png)  
+*Chatbot interactivo con soporte multi-fuente.*
+
+### 🔹 Gestión de Archivos
+![Gestión de Archivos](screenshots/EV2.png)  
+*Panel para subir, indexar y eliminar PDFs de forma privada.*
+
+### 🔹 Configuración Dinámica
+![Configuración Dinámica](screenshots/EV3.png)  
+*Selector de proveedores de LLM y modelos como `Llama-3.1-8B`.*
 
 ---
 
@@ -52,7 +67,6 @@ Para ejecutar este proyecto localmente:
 ```bash
 pip install -r requirements.txt
 python app.py
----
 
 ## Dependencias
 
